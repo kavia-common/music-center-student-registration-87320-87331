@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from flask_smorest import Api
+import logging
 
 from .routes.health import blp as health_blp
 from .routes.students import blp as students_blp
@@ -28,6 +29,17 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 280, "pool_pre_ping":
 # Import PyMySQL and register it with MySQLdb name for SQLAlchemy
 import pymysql
 pymysql.install_as_MySQLdb()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@app.before_request
+def log_request_info():
+    logger.info('Request Headers: %s', dict(request.headers))
+    logger.info('Request URL: %s %s', request.method, request.full_path)
+    if request.is_json:
+        logger.info('Request Body: %s', request.get_json())
 
 # Initialize extensions
 api = Api(app)
