@@ -35,8 +35,10 @@ class StudentResponseSchema(Schema):
 
 
 @blp.route("/")
+@blp.route("")  # Support both /api/students and /api/students/
 class StudentsCollection(MethodView):
     # PUBLIC_INTERFACE
+    @blp.response(200, description="List of registered students")
     def get(self):
         """List all registered students."""
         students = Student.query.order_by(Student.id.desc()).all()
@@ -44,7 +46,7 @@ class StudentsCollection(MethodView):
 
     # PUBLIC_INTERFACE
     @blp.arguments(StudentCreateSchema)
-    @blp.response(201, StudentResponseSchema)
+    @blp.response(201, StudentResponseSchema, description="Student created successfully")
     def post(self, new_student):
         """
         Create a new student registration.
