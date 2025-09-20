@@ -23,6 +23,12 @@ app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-
 # Database configuration (SQLAlchemy URI built from env or db_connection.txt)
 app.config["SQLALCHEMY_DATABASE_URI"] = build_mysql_uri_from_env_or_file()
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 280, "pool_pre_ping": True}
+
+# Set SQLAlchemy to use PyMySQL for MySQL connections
+import sqlalchemy as sa
+from sqlalchemy import create_engine
+sa.dialects.registry.register("mysql", "pymysql", "pymysql.dialects.mysql")
 
 # Initialize extensions
 api = Api(app)
