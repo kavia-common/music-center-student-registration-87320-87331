@@ -25,10 +25,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = build_mysql_uri_from_env_or_file()
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 280, "pool_pre_ping": True}
 
-# Set SQLAlchemy to use PyMySQL for MySQL connections
-import sqlalchemy as sa
-from sqlalchemy import create_engine
-sa.dialects.registry.register("mysql", "pymysql", "pymysql.dialects.mysql")
+# Import PyMySQL and register it with MySQLdb name for SQLAlchemy
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Initialize extensions
 api = Api(app)

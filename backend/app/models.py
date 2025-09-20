@@ -84,7 +84,7 @@ def build_mysql_uri_from_env_or_file() -> str:
 
     if user and password and database:
         # Use PyMySQL dialect explicitly
-        return f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}?charset=utf8mb4"
+        return f"mysql+mysqldb://{user}:{password}@{host}:{port}/{database}?charset=utf8mb4"
 
     # 3) Fallback to db_connection.txt (read-only safe)
     # The sibling workspace typically holds db_connection.txt
@@ -105,7 +105,7 @@ def build_mysql_uri_from_env_or_file() -> str:
     if parsed:
         p_user, p_pass, p_host, p_db, p_port = parsed
         p_port = p_port or 3306
-        return f"mysql+pymysql://{p_user}:{p_pass}@{p_host}:{p_port}/{p_db}?charset=utf8mb4"
+        return f"mysql+mysqldb://{p_user}:{p_pass}@{p_host}:{p_port}/{p_db}?charset=utf8mb4"
 
     # 4) Final fallback: raise descriptive error
     raise RuntimeError(
